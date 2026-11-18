@@ -233,6 +233,30 @@ td.num{white-space:nowrap;font-family:var(--mono);font-size:13px}
 .line .l{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block}
 .line .v{font-size:15.5px;word-break:break-all;user-select:all}
 .copy{font:500 13px var(--body);padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;flex:none}
+/* flip cards: colour fronts are saturated with white text, so they read on both themes */
+.flip{--fc1:#4F63D6;--fc2:#8193F2;perspective:1400px;cursor:pointer;border-radius:var(--r);min-width:0;outline-offset:4px}
+.flip.f2{--fc1:#E2650C;--fc2:#F7A35C}
+.flip.f3{--fc1:#B83A72;--fc2:#E57BA8}
+.flip.f4{--fc1:#3F7A18;--fc2:#7DB54A}
+.flip.f5{--fc1:#2A2E4F;--fc2:#5A6199}
+.flip.wide{grid-column:span 2}
+.flip-inner{display:grid;height:100%;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.flip.on .flip-inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--r);padding:26px;display:flex;flex-direction:column;gap:12px;min-height:250px}
+.front{background:radial-gradient(120% 90% at 100% 0%,var(--fc2),var(--fc1) 70%);color:#fff;box-shadow:0 18px 40px -24px var(--fc1)}
+.front .k{font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.front h3{font-size:clamp(24px,2.6vw,30px);font-weight:400;line-height:1.15;color:#fff}
+.front .hint{margin-top:auto;font:500 12px var(--mono);letter-spacing:.08em;color:#fff;opacity:.85;display:inline-flex;align-items:center;gap:6px}
+.back{transform:rotateY(180deg);background:var(--surface);border:1.5px solid var(--fc1);color:var(--fg)}
+.back .k{font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--fc1)}
+:root[data-theme="dark"] .back .k{color:var(--fc2)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .back .k{color:var(--fc2)}}
+.back p{color:var(--muted);font-size:15.5px}
+.back .proof{margin-top:auto;font-family:var(--mono);font-size:12px;color:var(--fg);padding-top:12px;border-top:1px dashed var(--line)}
+.flip:hover .front{filter:brightness(1.05)}
+@media (max-width:860px){.flip.wide{grid-column:auto}}
+@media (prefers-reduced-motion:reduce){.flip-inner{transition:none}}
+
 /* photo wall */
 .wall{column-count:3;column-gap:16px}
 .shot{break-inside:avoid;margin:0 0 16px;border-radius:var(--r);overflow:hidden;background:var(--surface);border:1px solid var(--line);display:block}
@@ -427,47 +451,6 @@ footer{padding-block:36px 48px;color:var(--faint);font-size:13px;text-align:cent
   </div>
 </section>
 
-<section class="block" id="unseen">
-  <div class="wrap">
-    <div class="head">
-      <span class="label">What the resume doesn't say</span>
-      <h2>Five things you'd only learn <em>in a conversation</em></h2>
-    </div>
-    <div class="unseen">
-      <article class="card wide">
-        <span class="k">I already work like an HRBP</span>
-        <h3>I've done the job's core work under a different title.</h3>
-        <p>At Citi I redesigned workflows across 43 portfolios, used performance data to recommend a team size to leadership, onboarded new analysts, and kept every record audit-ready. As Engagement Committee Head I ran town halls, collected feedback and closed the loop on concerns. That is business partnering, people operations and culture work, done for a bank's fraud team.</p>
-        <div class="proof">Proof: 50% faster TAT · team right-sized to 3 · 70% fewer errors · 6–7 town halls</div>
-      </article>
-      <article class="card">
-        <span class="k">I build, not just buy</span>
-        <h3>I shipped a live product with Claude Code.</h3>
-        <p>unposted.studio runs on GitHub, Razorpay and Cloudflare D1. When Sarvam picks an HRMS, I can read the docs, test the APIs and check whether the workflows actually hold up.</p>
-        <div class="proof">Live since 1 Nov 2026 · 84 visitors in week one</div>
-      </article>
-      <article class="card">
-        <span class="k">Investigations</span>
-        <h3>Fair, fast and documented is my default.</h3>
-        <p>123+ fraud investigations at 113% of target with 100% accuracy taught me to collect facts, stay neutral and write findings that survive an audit. Employee relations cases need the same discipline.</p>
-        <div class="proof">5× Quality Topper · 2 Citi performance awards · promoted in 1.2 years</div>
-      </article>
-      <article class="card">
-        <span class="k">AI adoption</span>
-        <h3>I've led a team onto a GenAI tool.</h3>
-        <p>I brought Citi Stylus into our workflow and cut translation time from 7 days to 2. At an AI company, HR should be the first team using the product, not the last.</p>
-        <div class="proof">7 → 2 days per case</div>
-      </article>
-      <article class="card">
-        <span class="k">Ambiguity</span>
-        <h3>I've started four things from zero.</h3>
-        <p>A drop-shipping store (₹1,07,119 in 2 months, with a data-led pivot), an Airbnb at 90% occupancy, a founder's office culture deck, and Unposted. I'm comfortable when there's no playbook yet.</p>
-        <div class="proof">Startup reps before a scale-up role</div>
-      </article>
-    </div>
-  </div>
-</section>
-
 <section class="block" id="proof" style="padding-top:0">
   <div class="wrap">
     <div class="head">
@@ -485,6 +468,47 @@ footer{padding-block:36px 48px;color:var(--faint);font-size:13px;text-align:cent
       <figure class="shot"><img class="crop" src="img/women-in-leadership.jpg" alt="Rucha's article 'Women in Leadership: Not a Question of Capability, But Visibility' in CXO Samvaad" style="object-position:50% 67%" loading="lazy"><figcaption><b>Published</b>"Women in Leadership: Not a Question of Capability, But Visibility", in CXO Samvaad's special edition from Bharat CXO.</figcaption></figure>
       <figure class="shot"><img src="img/jewellery-venture.jpg" alt="Collage of gold jewellery products and happy customers from Rucha's jewellery venture" loading="lazy"><figcaption><b>Founder reps</b>My jewellery venture: sourcing, pricing, packaging and selling, after a data-led pivot from toys.</figcaption></figure>
       <figure class="shot"><img class="crop" src="img/popup-stall.jpg" alt="Rucha presenting a pop-up market stall with tote bags and jewellery" style="object-position:50% 40%" loading="lazy"><figcaption><b>On the ground</b>Running a pop-up stall. Selling face to face teaches you to read people fast.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="unseen" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <span class="label">What the resume doesn't say</span>
+      <h2>Five things you'd only learn <em>in a conversation</em></h2>
+    </div>
+    <div class="unseen">
+      <div class="flip f1 wide" role="button" tabindex="0" aria-pressed="false" aria-label="I already work like an HRBP: tap to flip">
+        <div class="flip-inner">
+          <div class="face front"><span class="k">I already work like an HRBP</span><h3>I've done the job's core work under a different title.</h3><span class="hint">Tap to flip ↻</span></div>
+          <div class="face back"><span class="k">I already work like an HRBP</span><p>At Citi I redesigned workflows across 43 portfolios, used performance data to recommend a team size to leadership, onboarded new analysts, and kept every record audit-ready. As Engagement Committee Head I ran town halls, collected feedback and closed the loop on concerns. That is business partnering, people operations and culture work, done for a bank's fraud team.</p><div class="proof">Proof: 50% faster TAT · team right-sized to 3 · 70% fewer errors · 6–7 town halls</div></div>
+        </div>
+      </div>
+      <div class="flip f2" role="button" tabindex="0" aria-pressed="false" aria-label="I build, not just buy: tap to flip">
+        <div class="flip-inner">
+          <div class="face front"><span class="k">I build, not just buy</span><h3>I shipped a live product with Claude Code.</h3><span class="hint">Tap to flip ↻</span></div>
+          <div class="face back"><span class="k">I build, not just buy</span><p>unposted.studio runs on GitHub, Razorpay and Cloudflare D1. When Sarvam picks an HRMS, I can read the docs, test the APIs and check whether the workflows actually hold up.</p><div class="proof">Live since 1 Nov 2026 · 84 visitors in week one</div></div>
+        </div>
+      </div>
+      <div class="flip f3" role="button" tabindex="0" aria-pressed="false" aria-label="Investigations: tap to flip">
+        <div class="flip-inner">
+          <div class="face front"><span class="k">Investigations</span><h3>Fair, fast and documented is my default.</h3><span class="hint">Tap to flip ↻</span></div>
+          <div class="face back"><span class="k">Investigations</span><p>123+ fraud investigations at 113% of target with 100% accuracy taught me to collect facts, stay neutral and write findings that survive an audit. Employee relations cases need the same discipline.</p><div class="proof">5× Quality Topper · 2 Citi performance awards · promoted in 1.2 years</div></div>
+        </div>
+      </div>
+      <div class="flip f4" role="button" tabindex="0" aria-pressed="false" aria-label="AI adoption: tap to flip">
+        <div class="flip-inner">
+          <div class="face front"><span class="k">AI adoption</span><h3>I've led a team onto a GenAI tool.</h3><span class="hint">Tap to flip ↻</span></div>
+          <div class="face back"><span class="k">AI adoption</span><p>I brought Citi Stylus into our workflow and cut translation time from 7 days to 2. At an AI company, HR should be the first team using the product, not the last.</p><div class="proof">7 → 2 days per case</div></div>
+        </div>
+      </div>
+      <div class="flip f5" role="button" tabindex="0" aria-pressed="false" aria-label="Ambiguity: tap to flip">
+        <div class="flip-inner">
+          <div class="face front"><span class="k">Ambiguity</span><h3>I've started four things from zero.</h3><span class="hint">Tap to flip ↻</span></div>
+          <div class="face back"><span class="k">Ambiguity</span><p>A drop-shipping store (₹1,07,119 in 2 months, with a data-led pivot), an Airbnb at 90% occupancy, a founder's office culture deck, and Unposted. I'm comfortable when there's no playbook yet.</p><div class="proof">Startup reps before a scale-up role</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -729,6 +753,13 @@ footer{padding-block:36px 48px;color:var(--faint);font-size:13px;text-align:cent
   document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>run(c.dataset.task)));
   document.getElementById('send').addEventListener('click',()=>run(current));
   renderStatic('jd');
+
+  /* flip cards */
+  document.querySelectorAll('.flip').forEach(f=>{
+    const t=()=>{const on=f.classList.toggle('on');f.setAttribute('aria-pressed',on)};
+    f.addEventListener('click',e=>{if(!e.target.closest('a'))t()});
+    f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}});
+  });
 
   /* copy */
   document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
